@@ -1,3 +1,4 @@
+docopt==0.6.1
 moviepy
 --allow-external PIL 
 --allow-unverified PIL
