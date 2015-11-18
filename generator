@@ -86,6 +86,6 @@ def get_output_prefix():
     return TMP_FRAMES_PATH + ("%032x_" % random.getrandbits(128))
 
 if __name__ == "__main__":
-    arguments = docopt(__doc__, version='Naval Fate 2.0')
+    arguments = docopt(__doc__, version='0.0.1')
     generate_video_thumbnail(arguments)
 
