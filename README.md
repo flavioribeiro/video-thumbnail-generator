@@ -15,7 +15,7 @@ $ chmod a+x build && ./build
 
 ### Run
 ```shell
-$ chmod a+x generator && ./generator --help
+$ ./generator --help
 Video Thumbnail Generator
 
 Usage:
