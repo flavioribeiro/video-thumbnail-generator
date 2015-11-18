@@ -31,7 +31,6 @@ def generate_video_thumbnail(args):
     interval = int(args['<interval>'])
     size = (int(args['<width>']), int(args['<height>']))
     outputPrefix = get_output_prefix()
-
     generate_frames(videoFileClip, interval, outputPrefix, size)
 
     columns = int(args['<columns>'])
@@ -40,15 +39,16 @@ def generate_video_thumbnail(args):
 
 def generate_frames(videoFileClip, interval, outputPrefix, size):
     print "Extracting", int(videoFileClip.duration / interval), "frames"
+    frameCount = 0
     for i in range(0, int(videoFileClip.duration), interval):
-        extract_frame(videoFileClip, i, outputPrefix, size)
+        extract_frame(videoFileClip, i, outputPrefix, size, frameCount)
+        frameCount += 1
     print " Frames extracted."
 
-
-def extract_frame(videoFileClip, moment, outputPrefix, size):
+def extract_frame(videoFileClip, moment, outputPrefix, size, frameCount):
     sys.stdout.write(".")
     sys.stdout.flush()
-    output = outputPrefix + str(moment) + ".png"
+    output = outputPrefix + ("%05d.png" % frameCount)
     videoFileClip.save_frame(output, t=int(moment))
     resize_image(output, size)
 
@@ -78,12 +78,10 @@ def merge_frames(images, finalImage, columns, size, output):
     shutil.rmtree(TMP_FRAMES_PATH, ignore_errors=True)
     print "Saved!"
 
-
 def get_output_prefix():
     if not os.path.exists(TMP_FRAMES_PATH):
         os.makedirs(TMP_FRAMES_PATH)
     return TMP_FRAMES_PATH + ("%032x_" % random.getrandbits(128))
-
 
 if __name__ == "__main__":
     arguments = docopt(__doc__, version='Naval Fate 2.0')
