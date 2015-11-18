@@ -21,7 +21,7 @@ Options:
 from docopt import docopt
 from moviepy.editor import VideoFileClip
 from PIL import Image
-import glob, os, random, sys, shutil
+import glob, os, random, sys, shutil, math
 
 
 TMP_FRAMES_PATH="/tmp/frames/"
@@ -39,10 +39,10 @@ def generate_video_thumbnail(args):
     generate_sprite_from_images(outputPrefix, columns, size, output)
 
 def generate_frames(videoFileClip, interval, outputPrefix, size):
-    print "Extracting", int(videoFileClip.duration / interval), "frames (prefix:" + outputPrefix + ")"
+    print "Extracting", int(videoFileClip.duration / interval), "frames"
     for i in range(0, int(videoFileClip.duration), interval):
         extract_frame(videoFileClip, i, outputPrefix, size)
-    print "Frames extracted."
+    print " Frames extracted."
 
 
 def extract_frame(videoFileClip, moment, outputPrefix, size):
@@ -54,7 +54,7 @@ def extract_frame(videoFileClip, moment, outputPrefix, size):
 
 def resize_image(filename, size):
     image = Image.open(filename)
-    image.resize(size, Image.ANTIALIAS)
+    image = image.resize(size, Image.ANTIALIAS)
     image.save(filename)
 
 def generate_sprite_from_images(framesPath, columns, size, output):
@@ -62,16 +62,17 @@ def generate_sprite_from_images(framesPath, columns, size, output):
     images = [Image.open(filename) for filename in framesMap]
     print "%d frames will be combined." % len(images)
     masterWidth = size[0] * columns
-    masterHeight = size[1] * len(images) / columns
+    masterHeight = size[1] * int(math.ceil(float(len(images)) / columns))
     finalImage = Image.new(mode='RGBA', size=(masterWidth, masterHeight), color=(0,0,0,0))
     merge_frames(images, finalImage, columns, size, output)
 
 def merge_frames(images, finalImage, columns, size, output):
+    line = 0
     for i, image in enumerate(images):
-        for j in range(0, columns):
-            locationX = size[0] * j
-            locationY = size[1] * i
-            finalImage.paste(image, (locationX, locationY))
+        locationX = size[0] * i
+        locationY = size[1] * line
+        finalImage.paste(image, (locationX, locationY))
+        if i != 0 and i % columns == 0: line += 1
 
     finalImage.save(output, transparency=0)
     shutil.rmtree(TMP_FRAMES_PATH, ignore_errors=True)
