@@ -36,7 +36,7 @@ Options:
 
 ### Example
 ```shell
-$ ./generator videos/27467_1_milkbots_wg_720p.mp4 2 126 73 10 27467_1_milkbots_wg_with_script.jpg
+$ ./generator videos/27467_1_milkbots_wg_720p.mp4 2 126 73 10 thumbnails.jpg
 Extracting 101 frames
 .................................................................. Frames extracted.
 Saved!
