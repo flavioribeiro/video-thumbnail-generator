@@ -35,7 +35,7 @@ def generate_video_thumbnail(args):
 
     columns = int(args['<columns>'])
     output = args['<output>']
-    generate_sprite_from_images(outputPrefix, columns, size, output)
+    generate_sprite_from_frames(outputPrefix, columns, size, output)
 
 def generate_frames(videoFileClip, interval, outputPrefix, size):
     print "Extracting", int(videoFileClip.duration / interval), "frames"
@@ -50,14 +50,14 @@ def extract_frame(videoFileClip, moment, outputPrefix, size, frameCount):
     sys.stdout.flush()
     output = outputPrefix + ("%05d.png" % frameCount)
     videoFileClip.save_frame(output, t=int(moment))
-    resize_image(output, size)
+    resize_frame(output, size)
 
-def resize_image(filename, size):
+def resize_frame(filename, size):
     image = Image.open(filename)
     image = image.resize(size, Image.ANTIALIAS)
     image.save(filename)
 
-def generate_sprite_from_images(framesPath, columns, size, output):
+def generate_sprite_from_frames(framesPath, columns, size, output):
     framesMap = sorted(glob.glob(framesPath + "*.png"))
     images = [Image.open(filename) for filename in framesMap]
     masterWidth = size[0] * columns
