@@ -21,10 +21,10 @@ Options:
 from docopt import docopt
 from moviepy.editor import VideoFileClip
 from PIL import Image
-import glob, os, random, sys, shutil, math
+import glob, os, random, sys, shutil, math, tempfile
 
 
-TMP_FRAMES_PATH="/tmp/frames/"
+TMP_FRAMES_PATH = tempfile.mkstemp()[1]
 
 def generate_video_thumbnail(args):
     videoFileClip = VideoFileClip(args['<video>'])
