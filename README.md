@@ -5,7 +5,7 @@
 
 ![image](https://cloud.githubusercontent.com/assets/244265/11234416/b1a67230-8d95-11e5-97a4-c2acdcbf72f7.png)
 
-Generate a thumbnail sprite shouldn't be hard, because almost all video players enhances user's seekbar navigation by providing a thumbnail preview of the moments where the user want to seek. This is a python script that, given a video, generate a thumbnail sprite image from it.
+Almost all video players enhances user's seekbar navigation by providing a thumbnail preview of the moments where the user want to seek, so generate this sprites shouldn't be hard. This is a python script that, given a video, generate a thumbnail sprite image from it.
 
 ## Build
 
