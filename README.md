@@ -50,8 +50,9 @@ Options:
 ## Example
 ```shell
 $ ./generator videos/27467_1_milkbots_wg_720p.mp4 2 126 73 10 thumbnails.jpg
-Extracting 101 frames
-.................................................................. Frames extracted.
+Extracting 5 frames
+  [####################################]  100%
+Frames extracted.
 Saved!
 ```
 
