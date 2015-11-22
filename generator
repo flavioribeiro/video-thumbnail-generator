@@ -21,7 +21,8 @@ Options:
 from docopt import docopt
 from moviepy.editor import VideoFileClip
 from PIL import Image
-import glob, os, random, sys, shutil, math, tempfile
+from click import progressbar
+import glob, os, random, shutil, math, tempfile
 
 
 TMP_FRAMES_PATH = tempfile.mkstemp()[1]
@@ -40,14 +41,13 @@ def generate_video_thumbnail(args):
 def generate_frames(videoFileClip, interval, outputPrefix, size):
     print "Extracting", int(videoFileClip.duration / interval), "frames"
     frameCount = 0
-    for i in range(0, int(videoFileClip.duration), interval):
-        extract_frame(videoFileClip, i, outputPrefix, size, frameCount)
-        frameCount += 1
-    print " Frames extracted."
+    with progressbar(range(0, int(videoFileClip.duration), interval)) as items:
+        for i in items:
+            extract_frame(videoFileClip, i, outputPrefix, size, frameCount)
+            frameCount += 1
+    print "Frames extracted."
 
 def extract_frame(videoFileClip, moment, outputPrefix, size, frameCount):
-    sys.stdout.write(".")
-    sys.stdout.flush()
     output = outputPrefix + ("%05d.png" % frameCount)
     videoFileClip.save_frame(output, t=int(moment))
     resize_frame(output, size)
