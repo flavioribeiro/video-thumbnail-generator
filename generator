@@ -59,22 +59,27 @@ def resize_frame(filename, size):
 
 def generate_sprite_from_frames(framesPath, columns, size, output):
     framesMap = sorted(glob.glob(framesPath + "*.png"))
-    images = [Image.open(filename) for filename in framesMap]
-    masterWidth = size[0] * columns
-    masterHeight = size[1] * int(math.ceil(float(len(images)) / columns))
-    finalImage = Image.new(mode='RGBA', size=(masterWidth, masterHeight), color=(0,0,0,0))
-    merge_frames(images, finalImage, columns, size, output)
 
-def merge_frames(images, finalImage, columns, size, output):
+    masterWidth = size[0] * columns
+    masterHeight = size[1] * int(math.ceil(float(len(framesMap)) / columns))
+
     line, column = 0, 0
-    for image in images:
-        locationX = size[0] * column
-        locationY = size[1] * line
-        finalImage.paste(image, (locationX, locationY))
-        column += 1
-        if column == columns:
-            line += 1
-            column = 0
+
+    finalImage = Image.new(mode='RGBA', size=(masterWidth, masterHeight), color=(0,0,0,0))
+
+    for filename in framesMap:
+        with Image.open(filename) as image:              
+
+            locationX = size[0] * column
+            locationY = size[1] * line
+
+            finalImage.paste(image, (locationX, locationY))
+
+            column += 1
+            
+            if column == columns:
+                line += 1
+                column = 0
 
     finalImage.save(output, transparency=0)
     shutil.rmtree(TMP_FRAMES_PATH, ignore_errors=True)
