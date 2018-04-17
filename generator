@@ -63,9 +63,14 @@ def generate_sprite_from_frames(framesPath, columns, size, output):
     masterWidth = size[0] * columns
     masterHeight = size[1] * int(math.ceil(float(len(framesMap)) / columns))
 
-    line, column = 0, 0
+    line, column, mode = 0, 0, 'RGBA'
 
-    finalImage = Image.new(mode='RGBA', size=(masterWidth, masterHeight), color=(0,0,0,0))
+    try:
+        finalImage = Image.new(mode=mode, size=(masterWidth, masterHeight), color=(0,0,0,0))
+        finalImage.save(output)
+    except IOError:
+        mode = 'RGB'
+        finalImage = Image.new(mode=mode, size=(masterWidth, masterHeight))
 
     for filename in framesMap:
         with Image.open(filename) as image:              
@@ -81,7 +86,7 @@ def generate_sprite_from_frames(framesPath, columns, size, output):
                 line += 1
                 column = 0
 
-    finalImage.save(output, transparency=0)
+    finalImage.save(output)
     shutil.rmtree(TMP_FRAMES_PATH, ignore_errors=True)
     print "Saved!"
 
