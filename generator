@@ -39,13 +39,13 @@ def generate_video_thumbnail(args):
     generate_sprite_from_frames(outputPrefix, columns, size, output)
 
 def generate_frames(videoFileClip, interval, outputPrefix, size):
-    print "Extracting", int(videoFileClip.duration / interval), "frames"
+    print("Extracting", int(videoFileClip.duration / interval), "frames")
     frameCount = 0
     with progressbar(range(0, int(videoFileClip.duration), interval)) as items:
         for i in items:
             extract_frame(videoFileClip, i, outputPrefix, size, frameCount)
             frameCount += 1
-    print "Frames extracted."
+    print("Frames extracted.")
 
 def extract_frame(videoFileClip, moment, outputPrefix, size, frameCount):
     output = outputPrefix + ("%05d.png" % frameCount)
@@ -88,7 +88,7 @@ def generate_sprite_from_frames(framesPath, columns, size, output):
 
     finalImage.save(output)
     shutil.rmtree(TMP_FRAMES_PATH, ignore_errors=True)
-    print "Saved!"
+    print("Saved!")
 
 def get_output_prefix():
     if not os.path.exists(TMP_FRAMES_PATH):
