@@ -48,8 +48,18 @@ Options:
 ```
 
 ## Example
+**Single file**
 ```shell
 $ ./generator videos/27467_1_milkbots_wg_720p.mp4 2 126 73 10 thumbnails.jpg
+Extracting 5 frames
+  [####################################]  100%
+Frames extracted.
+Saved!
+```
+
+**Directory**
+```shell
+$ ./generator videos/ 2 126 73 10 thumbnails/
 Extracting 5 frames
   [####################################]  100%
 Frames extracted.

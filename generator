@@ -22,28 +22,63 @@ from docopt import docopt
 from moviepy.editor import VideoFileClip
 from PIL import Image
 from click import progressbar
+from collections import namedtuple
 import glob
 import os
 import random
 import shutil
 import math
 import tempfile
+import sys
 
 
 TMP_FRAMES_PATH = tempfile.mkdtemp()
 
 
 def generate_video_thumbnails(args):
-    filepath = args['<video>']
+    input_path = args['<video>']
     interval = int(args['<interval>'])
     size = (int(args['<width>']), int(args['<height>']))
     output_prefix = get_output_prefix()
     columns = int(args['<columns>'])
-    output = args['<output>']
+    output_path = args['<output>']
 
-    video_file_clip = VideoFileClip(filepath)
-    generate_frames(video_file_clip, interval, output_prefix, size)
-    generate_sprite_from_frames(output_prefix, columns, size, output)
+    file_paths = set()
+
+    if os.path.isdir(input_path):
+        # Ensure output path is also directory
+        if not os.path.isdir(output_path):
+            print(
+                "If input path is directory then "
+                "output path must be directory"
+            )
+            sys.exit(1)
+
+        # Strip seperator so contructing output is uniform
+        output_path = output_path.strip(os.sep)
+
+        # Add all files in directory for processing
+        for file_name in os.listdir(input_path):
+            file_path = os.path.join(input_path, file_name)
+            if os.path.isfile(file_path):
+                # Construct output path for thumbnail using
+                # the video files filename
+                single_output_path = \
+                    "{output_path}{seperator}{file_name}.png". \
+                    format(
+                        output_path=output_path,
+                        seperator=os.sep,
+                        file_name=os.path.basename(file_path)
+                    )
+                file_paths.add((file_path, single_output_path,))
+    else:
+        file_paths.add((input_path, output_path,))
+
+    # Process all files sequentially
+    for file_path in file_paths:
+        video_file_clip = VideoFileClip(file_path[0])
+        generate_frames(video_file_clip, interval, output_prefix, size)
+        generate_sprite_from_frames(output_prefix, columns, size, file_path[1])
 
 
 def generate_frames(video_file_clip, interval, output_prefix, size):
