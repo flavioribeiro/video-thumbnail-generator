@@ -45,6 +45,7 @@ Options:
   <height>        Height of each thumbnail.
   <columns>       Total number of thumbnails per line.
   <output>        Output.
+  <parallelism>   Number of files to process in parallel
 ```
 
 ## Example
