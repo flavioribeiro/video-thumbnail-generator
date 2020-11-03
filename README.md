@@ -32,7 +32,7 @@ $ ./generator --help
 Video Thumbnail Generator
 
 Usage:
-  ./generator <video> <interval> <width> <height> <columns> <output>
+  ./generator <video> <interval> <width> <height> <columns> <output> <parallelism>
   ./generator (-h | --help)
   ./generator --version
 
@@ -51,20 +51,25 @@ Options:
 ## Example
 **Single file**
 ```shell
-$ ./generator videos/27467_1_milkbots_wg_720p.mp4 2 126 73 10 thumbnails.jpg
-Extracting 5 frames
-  [####################################]  100%
-Frames extracted.
+$ ./generator samples/sample.mp4 60 300 200 2 output/sample.mp4.png
+[sample.mp4] Extracting frame 1/3
+[sample.mp4] Extracting frame 2/3
+[sample.mp4] Extracting frame 3/3
+[sample.mp4.png] Savedacted.
 Saved!
 ```
 
 **Directory**
 ```shell
-$ ./generator videos/ 2 126 73 10 thumbnails/
-Extracting 5 frames
-  [####################################]  100%
-Frames extracted.
-Saved!
+$ ./generator samples/ 60 300 200 2 output/
+[sample copy.mp4] Extracting frame 1/3
+[sample.mp4] Extracting frame 1/3
+[sample copy.mp4] Extracting frame 2/3
+[sample.mp4] Extracting frame 2/3
+[sample copy.mp4] Extracting frame 3/3
+[sample.mp4] Extracting frame 3/3
+[sample copy.mp4.png] Saved
+[sample.mp4.png] Saved
 ```
 
 ![image](https://cloud.githubusercontent.com/assets/244265/11234316/b42913a6-8d94-11e5-865a-128ea8d801f7.png)

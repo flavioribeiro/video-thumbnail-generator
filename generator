@@ -3,7 +3,7 @@
 """Video Thumbnail Generator
 
 Usage:
-  ./generator <video> <interval> <width> <height> <columns> <output>
+  ./generator <video> <interval> <width> <height> <columns> <output> <parallelism>
   ./generator (-h | --help)
   ./generator --version
 
