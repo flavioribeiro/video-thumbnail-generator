@@ -3,20 +3,20 @@
 """Video Thumbnail Generator
 
 Usage:
-  ./generator <video> <interval> <width> <height> <columns> <output> <parallelism>
+  ./generator <video> <interval> <width> <height> <columns> <output> [<parallelism>]
   ./generator (-h | --help)
   ./generator --version
 
 Options:
-  -h --help     Show this screen.
-  --version     Show version.
+  -h --help       Show this screen.
+  --version       Show version.
   <video>         Video filepath.
   <interval>      Interval em seconds between frames.
   <width>         Width of each thumbnail.
   <height>        Height of each thumbnail.
   <columns>       Total number of thumbnails per line.
   <output>        Output.
-  <parallelism>   Number of files to process in parallel
+  [<parallelism>] Number of files to process in parallel.
 """
 
 from docopt import docopt
@@ -43,7 +43,7 @@ def generate_video_thumbnails(args):
     size = (int(args['<width>']), int(args['<height>']))
     columns = int(args['<columns>'])
     output_path = args['<output>']
-    parallelism = args.get('<parallelism>', cpu_count()*2-1)
+    parallelism = args.get('[<parallelism>]', cpu_count()*2-1)
 
     work_units = []
 
@@ -57,7 +57,7 @@ def generate_video_thumbnails(args):
             sys.exit(1)
 
         # Strip seperator so contructing output is uniform
-        output_path = output_path.strip(os.sep)
+        output_path = output_path.rstrip(os.sep)
 
         # Add all files in directory for processing
         for file_name in os.listdir(input_path):
@@ -65,13 +65,10 @@ def generate_video_thumbnails(args):
             if os.path.isfile(file_path):
                 # Construct output path for thumbnail using
                 # the video files filename
-                single_output_path = \
-                    "{output_path}{seperator}{file_name}.png". \
-                    format(
-                        output_path=output_path,
-                        seperator=os.sep,
-                        file_name=os.path.basename(file_path)
-                    )
+                single_output_path = os.path.join(
+                    output_path, os.path.basename(file_path) + ".png"
+                )
+
                 work_units.append((file_path, single_output_path,
                                    interval, size, columns,))
     else:
