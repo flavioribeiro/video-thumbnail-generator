@@ -75,7 +75,7 @@ def generate_video_thumbnails(args):
         work_units.append((input_path, output_path, interval, size, columns,))
 
     # Limit the number of parallel jobs if lower number of files
-    parallelism = min(parallelism, len(work_units))
+    parallelism = min(int(parallelism), len(work_units))
 
     # Process all files in parallel
     with Pool(parallelism) as p:
