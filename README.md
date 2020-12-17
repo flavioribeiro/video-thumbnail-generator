@@ -32,7 +32,7 @@ $ ./generator --help
 Video Thumbnail Generator
 
 Usage:
-  ./generator <video> <interval> <width> <height> <columns> <output> <parallelism>
+  ./generator <video> <interval> <width> <height> <columns> <output> [<parallelism>]
   ./generator (-h | --help)
   ./generator --version
 
@@ -45,7 +45,7 @@ Options:
   <height>        Height of each thumbnail.
   <columns>       Total number of thumbnails per line.
   <output>        Output.
-  <parallelism>   Number of files to process in parallel
+  [<parallelism>]   Number of files to process in parallel
 ```
 
 ## Example
