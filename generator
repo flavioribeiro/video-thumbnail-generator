@@ -94,18 +94,27 @@ def generate_video_thumbnails(args):
 
 def worker(queue):
     while True:
-        work_unit = queue.get()
+        try:
+            work_unit = queue.get(False)
 
-        # If no work unit then quit
-        if not work_unit:
-            return
+            # If no work unit then quit
+            if not work_unit:
+                break
+        except:
+            break
 
         input_file, output_file, interval, size, columns = work_unit
-        video_file_clip = VideoFileClip(input_file)
-        output_prefix = get_output_prefix()
-        file_name = os.path.basename(input_file)
-        generate_frames(file_name, video_file_clip, interval, output_prefix, size)
-        generate_sprite_from_frames(output_prefix, columns, size, output_file)
+
+        try:
+            video_file_clip = VideoFileClip(input_file)
+            output_prefix = get_output_prefix()
+            file_name = os.path.basename(input_file)
+            generate_frames(file_name, video_file_clip,
+                            interval, output_prefix, size)
+            generate_sprite_from_frames(output_prefix, columns,
+                                        size, output_file)
+        except:
+            print("Error occurred with file: {}".format(file_name))
 
 
 def generate_frames(file_name, video_file_clip, interval, output_prefix, size):
