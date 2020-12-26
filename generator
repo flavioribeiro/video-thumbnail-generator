@@ -100,10 +100,16 @@ def worker(queue):
             # If no work unit then quit
             if not work_unit:
                 break
+        # Handle exception when no more items in queue
         except:
             break
 
         input_file, output_file, interval, size, columns = work_unit
+
+        # Skip over any thumbnails that exist already
+        if os.path.exists(output_file):
+            print("[{}] Already exists, skipping".format(output_file))
+            continue
 
         try:
             video_file_clip = VideoFileClip(input_file)
@@ -114,7 +120,7 @@ def worker(queue):
             generate_sprite_from_frames(output_prefix, columns,
                                         size, output_file)
         except:
-            print("Error occurred with file: {}".format(file_name))
+            print("[{}] Error occurred with file".format(file_name))
 
 
 def generate_frames(file_name, video_file_clip, interval, output_prefix, size):
