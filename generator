@@ -131,11 +131,11 @@ def generate_frames(file_name, video_file_clip, interval, output_prefix, size):
     frame_count = 0
     total_frames = int(duration / interval)
     for i in range(0, int(duration), interval):
-        print("[{file_name}] Extracting frame {current}/{total}".
-              format(file_name=file_name, current=frame_count+1,
-                     total=total_frames+1))
-        extract_frame(video_file_clip, i, output_prefix, size, frame_count)
         frame_count += 1
+        print("[{file_name}] Extracting frame {current}/{total}".
+              format(file_name=file_name, current=frame_count,
+                     total=total_frames))
+        extract_frame(video_file_clip, i, output_prefix, size, frame_count)
 
 
 def extract_frame(video_file_clip, moment, output_prefix, size, frame_count):
