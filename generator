@@ -184,7 +184,7 @@ def generate_sprite_from_frames(frames_path, columns, size, output):
                 column = 0
 
     final_image.save(output)
-    shutil.rmtree(frames_path, ignore_errors=True)
+    shutil.rmtree(TMP_FRAMES_PATH, ignore_errors=True)
     output_file = os.path.basename(output)
     print("[{output_file}] Saved".format(output_file=output_file))
 
