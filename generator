@@ -121,9 +121,9 @@ def worker(queue):
                             interval, output_prefix, size)
             generate_sprite_from_frames(output_prefix, columns,
                                         size, output_file)
-        except:
-            print("[{file_name}] Error occurred with file".format(
-                file_name=file_name))
+        except Exception as e:
+            print("[{file_name}] Error occurred with file: {error}".format(
+                file_name=file_name, error=e))
 
 
 def generate_frames(file_name, video_file_clip, interval, output_prefix, size):
