@@ -146,7 +146,7 @@ def extract_frame(video_file_clip, moment, output_prefix, size, frame_count):
 
 def resize_frame(filename, size):
     image = Image.open(filename)
-    image = image.resize(size, Image.ANTIALIAS)
+    image = image.resize(size, Image.Resampling.LANCZOS)
     image.save(filename)
 
 
