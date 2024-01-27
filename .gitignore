@@ -58,3 +58,9 @@ target/
 
 #Mac
 .DS_Store
+
+# Input & output files
+**.mp4
+**.png
+generator
+.vscode/settings.json
