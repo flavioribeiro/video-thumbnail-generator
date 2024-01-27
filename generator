@@ -129,7 +129,7 @@ def worker(queue):
 def generate_frames(file_name, video_file_clip, interval, output_prefix, size):
     duration = video_file_clip.duration
     frame_count = 0
-    total_frames = int(duration / interval)
+    total_frames = int(duration / interval) + 1
     for i in range(0, int(duration), interval):
         frame_count += 1
         print("[{file_name}] Extracting frame {current}/{total}".
