@@ -11,7 +11,7 @@ Options:
   -h --help       Show this screen.
   --version       Show version.
   <video>         Video filepath.
-  <interval>      Interval em seconds between frames.
+  <interval>      Interval of seconds between frames.
   <width>         Width of each thumbnail.
   <height>        Height of each thumbnail.
   <columns>       Total number of thumbnails per line.
@@ -23,13 +23,11 @@ from docopt import docopt
 from moviepy.editor import VideoFileClip
 from PIL import Image
 from click import progressbar
-from collections import namedtuple
 from multiprocessing import cpu_count, Queue, Process
 import glob
 import os
 import random
 import shutil
-import math
 import tempfile
 import sys
 
@@ -57,7 +55,7 @@ def generate_video_thumbnails(args):
             )
             sys.exit(1)
 
-        # Strip seperator so contructing output is uniform
+        # Strip separator so contructing output is uniform
         output_path = output_path.rstrip(os.sep)
 
         # Add all files in directory for processing
@@ -86,6 +84,7 @@ def generate_video_thumbnails(args):
         p = Process(target=worker, args=(work_queue,))
         p.start()
         processes.append(p)
+    # [processes.append(Process(target=worker, args=(work_queue,)).start()) for i in range(parallelism)]
 
     # Block until all processes complete
     for p in processes:
@@ -101,7 +100,8 @@ def worker(queue):
             if not work_unit:
                 break
         # Handle exception when no more items in queue
-        except:
+        except Exception as e:
+            print(e)
             break
 
         input_file, output_file, interval, size, columns = work_unit
@@ -129,7 +129,7 @@ def worker(queue):
 def generate_frames(file_name, video_file_clip, interval, output_prefix, size):
     duration = video_file_clip.duration
     frame_count = 0
-    total_frames = int(duration / interval)
+    total_frames = int(duration / interval) + 1
     for i in range(0, int(duration), interval):
         frame_count += 1
         print("[{file_name}] Extracting frame {current}/{total}".
@@ -153,37 +153,38 @@ def resize_frame(filename, size):
 def generate_sprite_from_frames(frames_path, columns, size, output):
     frames_map = sorted(glob.glob(frames_path + "*.png"))
 
-    master_width = size[0] * columns
-    master_height = size[1] * int(math.ceil(float(len(frames_map)) / columns))
+    master_width = size[0]
+    master_height = size[1]
 
     line, column, mode = 0, 0, 'RGBA'
 
+    control = 0
+    outputBasename = os.path.splitext(os.path.basename(output))[0]
+    os.mkdir(outputBasename)
     try:
-        final_image = Image.new(
+        for filename in frames_map:
+            final_image = Image.new(
             mode=mode,
             size=(master_width, master_height),
             color=(0, 0, 0, 0)
-        )
-        final_image.save(output)
+            )
+            with Image.open(filename) as image:
+                final_image.paste(image, (0, 0))
+
+                column += 1
+
+                if column == columns:
+                    line += 1
+                    column = 0
+
+            final_image.save(os.path.join(outputBasename, f"{control}-{output}"))
+            control += 1
     except IOError:
         mode = 'RGB'
         final_image = Image.new(mode=mode, size=(master_width, master_height))
 
-    for filename in frames_map:
-        with Image.open(filename) as image:
 
-            location_x = size[0] * column
-            location_y = size[1] * line
 
-            final_image.paste(image, (location_x, location_y))
-
-            column += 1
-
-            if column == columns:
-                line += 1
-                column = 0
-
-    final_image.save(output)
     shutil.rmtree(frames_path, ignore_errors=True)
     output_file = os.path.basename(output)
     print("[{output_file}] Saved".format(output_file=output_file))
