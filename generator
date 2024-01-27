@@ -11,7 +11,7 @@ Options:
   -h --help       Show this screen.
   --version       Show version.
   <video>         Video filepath.
-  <interval>      Interval in seconds between frames.
+  <interval>      Interval of seconds between frames.
   <width>         Width of each thumbnail.
   <height>        Height of each thumbnail.
   <columns>       Total number of thumbnails per line.
