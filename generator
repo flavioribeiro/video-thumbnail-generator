@@ -11,7 +11,7 @@ Options:
   -h --help       Show this screen.
   --version       Show version.
   <video>         Video filepath.
-  <interval>      Interval em seconds between frames.
+  <interval>      Interval in seconds between frames.
   <width>         Width of each thumbnail.
   <height>        Height of each thumbnail.
   <columns>       Total number of thumbnails per line.
@@ -57,7 +57,7 @@ def generate_video_thumbnails(args):
             )
             sys.exit(1)
 
-        # Strip seperator so contructing output is uniform
+        # Strip separator so constructing output is uniform
         output_path = output_path.rstrip(os.sep)
 
         # Add all files in directory for processing
